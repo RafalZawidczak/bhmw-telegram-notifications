@@ -1,0 +1,74 @@
+import requests
+from bs4 import BeautifulSoup
+import re
+import tabula
+import telegram
+import pickle
+import os
+
+
+def get_links():
+  url = "https://bhmw.gov.pl/pl/warnings/current/"
+ 
+  read = requests.get(url)
+  html_content = read.content
+  soup = BeautifulSoup(html_content, "html.parser")
+
+  #get all <a href> links with filetype .pdf
+  links = soup.find_all('a', href=re.compile(r'(.pdf)'))
+
+  return links
+
+def get_pdf(links):
+  pdf_list=[]
+  for el in links:
+    pdf = re.sub('<a href="', "https://bhmw.gov.pl", str(el))
+    pdf = re.sub('.pdf".*', ".pdf", pdf)
+    pdf_list.append(pdf)
+  return pdf_list
+
+def get_new_alerts(pdf_list):
+  open_file = open('current_alerts.pkl', "rb")
+  loaded_list = pickle.load(open_file)
+
+  new_alerts=list(set(loaded_list) - set(pdf_list))
+
+  open_file = open('current_alerts.pkl', "wb")
+  pickle.dump(pdf_list, open_file)
+  open_file.close()
+
+  return new_alerts
+
+def send_messages(pdf_list, token):
+  
+  bot = telegram.Bot(token)
+  for i in range (len(pdf_list)):
+    um_szczecin= re.compile ('Ostrzezenia-nawigacyjne')
+    if um_szczecin.search(pdf_list[i]): #Jezeli plik z UM SZecin
+      tekst='Current navigation warnings issued by Szczecin City Hall have been updated. More details in PDF file. '
+      tekst+=str(pdf_list[i])
+      bot.send_message(chat_id="-606939991", text=tekst, parse_mode='HTML')
+    else:
+      table = tabula.read_pdf(pdf_list[i],pages='all', pandas_options={'header': None})
+      tabela=table[-1].fillna('')
+      tabela=tabela[~tabela[0].str.contains('Category')]
+
+      tekst=str(pdf_list[i]) + '\n ---------- \n'
+      try:
+        for i in range (len(tabela)):
+          tabela[1].iloc[i]= re.sub('\r', '\n', tabela[1].iloc[i])
+          if tabela[0].iloc[i] != ''  and i<(len(tabela))-1:
+            if tabela[0].iloc[i+1] != '':
+              tekst+=str(tabela[0].iloc[i]) + ': '+ str(tabela[1].iloc[i]) +'\n ---------- \n'
+            else:
+              tekst+=str(tabela[0].iloc[i]) + ': '+ str(tabela[1].iloc[i]) +'\n'
+          else:
+            tekst +=str(tabela[1].iloc[i]) +'\n \n '
+        bot.send_message(chat_id="-606939991", text=tekst, parse_mode='HTML')
+      except: bot.send_message(chat_id="-606939991", 
+      text="An error occurred while downloading the message content, please check the pdf file. " + tekst, parse_mode='HTML')
+
+#token = os.environ['TELEGRAM_TOKEN']
+links = get_links()
+pdf_list=get_pdf(links)
+send_messages(pdf_list)

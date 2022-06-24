@@ -1,0 +1,6 @@
+beautifulsoup4==4.11.1
+python_telegram_bot==13.12
+requests==2.27.1
+tabula==1.0.5
+tabula_py==2.4.0
+telegram==0.0.1
