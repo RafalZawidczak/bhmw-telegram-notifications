@@ -37,7 +37,7 @@ def get_new_alerts(pdf_list):
   pickle.dump(pdf_list, open_file)
   open_file.close()
 
-  return new_alerts
+  #return new_alerts
 
 def send_messages(pdf_list, token):
   
