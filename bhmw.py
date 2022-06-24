@@ -68,7 +68,7 @@ def send_messages(pdf_list, token):
       except: bot.send_message(chat_id="-606939991", 
       text="An error occurred while downloading the message content, please check the pdf file. " + tekst, parse_mode='HTML')
 
-#token = os.environ['TELEGRAM_TOKEN']
+token = os.environ['TELEGRAM_TOKEN']
 links = get_links()
 pdf_list=get_pdf(links)
 send_messages(pdf_list, token)
