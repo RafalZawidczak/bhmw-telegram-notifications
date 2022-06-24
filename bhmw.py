@@ -28,10 +28,10 @@ def get_pdf(links):
   return pdf_list
 
 def get_new_alerts(pdf_list):
-  open_file = open('current_alerts.pkl', "rb")
-  loaded_list = pickle.load(open_file)
+  #open_file = open('current_alerts.pkl', "rb")
+  #loaded_list = pickle.load(open_file)
 
-  new_alerts=list(set(loaded_list) - set(pdf_list))
+  #new_alerts=list(set(loaded_list) - set(pdf_list))
 
   open_file = open('current_alerts.pkl', "wb")
   pickle.dump(pdf_list, open_file)
@@ -71,4 +71,5 @@ def send_messages(pdf_list, token):
 token = os.environ['TELEGRAM_TOKEN']
 links = get_links()
 pdf_list=get_pdf(links)
+get_new_alerts(pdf_list)
 send_messages(pdf_list, token)
