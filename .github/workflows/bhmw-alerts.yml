@@ -1,0 +1,20 @@
+name: bhmw-alerts
+
+
+on: [push]
+
+jobs:
+  build_bhmw_alerts:
+    runs-on: ubuntu-latest
+    name: bhmw-alerts
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: install requirements
+        run: pip install -r requirements.txt
+      - name: python script run
+        run: |
+          python bhmw.py
