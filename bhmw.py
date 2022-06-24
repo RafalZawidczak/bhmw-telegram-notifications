@@ -71,4 +71,4 @@ def send_messages(pdf_list, token):
 #token = os.environ['TELEGRAM_TOKEN']
 links = get_links()
 pdf_list=get_pdf(links)
-send_messages(pdf_list)
+send_messages(pdf_list, token)
