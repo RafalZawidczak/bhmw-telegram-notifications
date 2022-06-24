@@ -18,3 +18,5 @@ jobs:
       - name: python script run
         run: |
           python bhmw.py
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
