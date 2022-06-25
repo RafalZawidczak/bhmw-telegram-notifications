@@ -5,6 +5,7 @@ import tabula
 import telegram
 import pickle
 import os
+import dropbox
 
 
 def get_links():
@@ -42,7 +43,7 @@ def get_new_alerts(pdf_list):
   open_file.close()
 
   with open("current_alerts.pkl", "rb") as f:
-    dbx.files_upload(f.read(), "/current_alerts1.pkl", mode=dropbox.files.WriteMode.overwrite, mute=True)
+    dbx.files_upload(f.read(), "/current_alerts.pkl", mode=dropbox.files.WriteMode.overwrite, mute=True)
 
   return new_alerts
 
