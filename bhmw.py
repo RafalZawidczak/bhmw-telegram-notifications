@@ -81,7 +81,8 @@ print(telegram_token)
 dropbox_token = os.environ['DROPBOX_TOKEN']
 print(dropbox_token)
 dbx = dropbox.Dropbox(dropbox_token)
+
 links = get_links()
 pdf_list=get_pdf(links)
-get_new_alerts(pdf_list)
-send_messages(pdf_list, telegram_token)
+new_alerts=get_new_alerts(pdf_list)
+send_messages(new_alerts, telegram_token)
