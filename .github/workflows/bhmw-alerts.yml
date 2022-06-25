@@ -20,4 +20,4 @@ jobs:
           python bhmw.py
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          DROPBOX_TOKEN: ${{ secrets.TDROPBOX_TOKEN }}
+          DROPBOX_TOKEN: ${{ secrets.DROPBOX_TOKEN }}
