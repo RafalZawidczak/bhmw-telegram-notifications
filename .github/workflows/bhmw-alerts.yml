@@ -1,7 +1,8 @@
 name: bhmw-alerts
 
-
-on: [push]
+on:
+  schedule:
+    - cron:  '0,30 * * * *'
 
 jobs:
   build_bhmw_alerts:
