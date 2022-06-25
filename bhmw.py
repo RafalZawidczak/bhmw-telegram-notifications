@@ -28,20 +28,27 @@ def get_pdf(links):
   return pdf_list
 
 def get_new_alerts(pdf_list):
-  #open_file = open('current_alerts.pkl', "rb")
-  #loaded_list = pickle.load(open_file)
+  with open("current_alerts.pkl", "wb") as f:
+    metadata, res = dbx.files_download(path="/current_alerts.pkl")
+    f.write(res.content)
+  open_file = open('current_alerts.pkl', "rb")
+  loaded_list = pickle.load(open_file)
+  f.close()
 
-  #new_alerts=list(set(loaded_list) - set(pdf_list))
+  new_alerts=list(set(pdf_list) - set(loaded_list))
 
   open_file = open('current_alerts.pkl', "wb")
   pickle.dump(pdf_list, open_file)
   open_file.close()
 
-  #return new_alerts
+  with open("current_alerts.pkl", "rb") as f:
+    dbx.files_upload(f.read(), "/current_alerts1.pkl", mode=dropbox.files.WriteMode.overwrite, mute=True)
 
-def send_messages(pdf_list, token):
+  return new_alerts
+
+def send_messages(pdf_list, telegram_token):
   
-  bot = telegram.Bot(token)
+  bot = telegram.Bot(telegram_token)
   for i in range (len(pdf_list)):
     um_szczecin= re.compile ('Ostrzezenia-nawigacyjne')
     if um_szczecin.search(pdf_list[i]): #Jezeli plik z UM SZecin
@@ -68,7 +75,8 @@ def send_messages(pdf_list, token):
       except: bot.send_message(chat_id="-606939991", 
       text="An error occurred while downloading the message content, please check the pdf file. " + tekst, parse_mode='HTML')
 
-token = os.environ['TELEGRAM_TOKEN']
+telegram_token = os.environ['TELEGRAM_TOKEN']
+dropbox_token = os.environ['DROPBOX_TOKEN']
 links = get_links()
 pdf_list=get_pdf(links)
 get_new_alerts(pdf_list)
