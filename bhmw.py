@@ -78,6 +78,7 @@ def send_messages(pdf_list, telegram_token):
 
 telegram_token = os.environ['TELEGRAM_TOKEN']
 dropbox_token = os.environ['DROPBOX_TOKEN']
+dbx = dropbox.Dropbox('dropbox_token')
 links = get_links()
 pdf_list=get_pdf(links)
 get_new_alerts(pdf_list)
