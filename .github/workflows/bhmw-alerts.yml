@@ -1,10 +1,6 @@
 name: bhmw-alerts
 
-on:
-  schedule:
-    - cron: '10,40 * * * *'
-
-  workflow_dispatch:
+on: [push]
 
 jobs:
   build_bhmw_alerts:
