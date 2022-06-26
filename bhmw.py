@@ -91,7 +91,7 @@ def send_messages(new_alerts, chat_id, telegram_token):
         chat_id: id of telegram channel
     """
   bot = telegram.Bot(telegram_token)
-  for i in range (len(pdf_list)):
+  for i in range (len(new_alerts)):
     um_szczecin= re.compile ('Ostrzezenia-nawigacyjne')
     if um_szczecin.search(pdf_list[i]): #Check if file contains 'Ostrzezenia-nawigacyjne' in its name
       tekst='Current navigation warnings issued by Szczecin City Hall have been updated. More details in PDF file. '
