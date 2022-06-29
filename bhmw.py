@@ -93,16 +93,16 @@ def send_messages(new_alerts, chat_id, telegram_token):
   bot = telegram.Bot(telegram_token)
   for i in range (len(new_alerts)):
     um_szczecin= re.compile ('Ostrzezenia-nawigacyjne')
-    if um_szczecin.search(pdf_list[i]): #Check if file contains 'Ostrzezenia-nawigacyjne' in its name
+    if um_szczecin.search(new_alerts[i]): #Check if file contains 'Ostrzezenia-nawigacyjne' in its name
       tekst='Current navigation warnings issued by Szczecin City Hall have been updated. More details in PDF file. '
-      tekst+=str(pdf_list[i])
+      tekst+=str(new_alerts[i])
       bot.send_message(chat_id=chat_id, text=tekst, parse_mode='HTML')
     else:
-      table = tabula.read_pdf(pdf_list[i],pages='all', pandas_options={'header': None}) #read table from pdf
+      table = tabula.read_pdf(new_alerts[i],pages='all', pandas_options={'header': None}) #read table from pdf
       tabela=table[-1].fillna('')
       tabela=tabela[~tabela[0].str.contains('Category')]
 
-      tekst=str(pdf_list[i]) + '\n ---------- \n'
+      tekst=str(new_alerts[i]) + '\n ---------- \n'
       try:
         for i in range (len(tabela)):
           tabela[1].iloc[i]= re.sub('\r', '\n', tabela[1].iloc[i]) #Change \r from pdf to \n to better display result
