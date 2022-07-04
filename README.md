@@ -12,7 +12,7 @@ Channel
 =================
 [You can find Telegram channel here](https://t.me/bhmw_warnings)
 
-[You can preview to see the Channel content.](https://t.me/s/bhmw_warnings)
+[Preview Channel content.](https://t.me/s/bhmw_warnings)
 
 Tech
 =================
